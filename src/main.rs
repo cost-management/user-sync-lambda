@@ -17,8 +17,8 @@ async fn main() -> Result<(), Error> {
 
 async fn start_lambda(event: LambdaEvent<CognitoEventUserPoolsPostConfirmation>) -> Result<Value, Error> {
     let customer_id = Uuid::from_str(event.payload.request.user_attributes.get("sub").unwrap())?;
-    let customer_email = event.payload.request.user_attributes.get("email").unwrap();
-    println!("Registration sync lambda started up for user with id: {}, and email: {}", &customer_id, customer_email);
+    let customer_email = event.payload.request.user_attributes.get("email").unwrap().to_ascii_lowercase();
+    println!("Registration sync lambda started up for user with id: {}, and email: {}", &customer_id, &customer_email);
 
     let mut database_connection = create_connection().await;
 
